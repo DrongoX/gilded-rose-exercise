@@ -3,29 +3,28 @@
  */
 package com.drongox.gildedrose;
 
-import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
+import org.junit.Test;
 
 public class GildedRoseTest
 {
+
   @Test
   public void should_decrease_by_one_day_given_standard_item()
   {
     //given
     String expected = "milk, 3, 14";
     Item[] items = new Item[]{
-        new Item("milk",4,15)
+        new Item("milk", 4, 15)
     };
-
     GildedRose gildedRose = new GildedRose(items);
-
     //when
     gildedRose.updateQuality();
-
     //then
-    Assertions.assertThat(gildedRose.items[0].toString()).isEqualTo(expected);
+    assertThat(gildedRose.items[0].toString()).isEqualTo(expected);
   }
+
 
   @Test
   public void should_decrease_quality_by_two_when_the_sellin_passed()
@@ -33,17 +32,15 @@ public class GildedRoseTest
     //given
     String expected = "milk, -2, 13";
     Item[] items = new Item[]{
-        new Item("milk",-1,15)
+        new Item("milk", -1, 15)
     };
-
     GildedRose gildedRose = new GildedRose(items);
-
     //when
     gildedRose.updateQuality();
-
     //then
-    Assertions.assertThat(gildedRose.items[0].toString()).isEqualTo(expected);
+    assertThat(gildedRose.items[0].toString()).isEqualTo(expected);
   }
+
 
   @Test
   public void should_not_make_quality_negative()
@@ -51,17 +48,15 @@ public class GildedRoseTest
     //given
     String expected = "milk, -3, 0";
     Item[] items = new Item[]{
-        new Item("milk",-2,0)
+        new Item("milk", -2, 0)
     };
-
     GildedRose gildedRose = new GildedRose(items);
-
     //when
     gildedRose.updateQuality();
-
     //then
-    Assertions.assertThat(gildedRose.items[0].toString()).isEqualTo(expected);
+    assertThat(gildedRose.items[0].toString()).isEqualTo(expected);
   }
+
 
   @Test
   public void should_increase_quality_when_product_is_aged_brie()
@@ -69,17 +64,15 @@ public class GildedRoseTest
     //given
     String expected = "Aged Brie, 41, 16";
     Item[] items = new Item[]{
-        new Item("Aged Brie",42,15)
+        new Item("Aged Brie", 42, 15)
     };
-
     GildedRose gildedRose = new GildedRose(items);
-
     //when
     gildedRose.updateQuality();
-
     //then
-    Assertions.assertThat(gildedRose.items[0].toString()).isEqualTo(expected);
+    assertThat(gildedRose.items[0].toString()).isEqualTo(expected);
   }
+
 
   @Test
   public void should_keep_quality_below_fifty()
@@ -87,17 +80,15 @@ public class GildedRoseTest
     //given
     String expected = "Aged Brie, 41, 50";
     Item[] items = new Item[]{
-        new Item("Aged Brie",42,50)
+        new Item("Aged Brie", 42, 50)
     };
-
     GildedRose gildedRose = new GildedRose(items);
-
     //when
     gildedRose.updateQuality();
-
     //then
-    Assertions.assertThat(gildedRose.items[0].toString()).isEqualTo(expected);
+    assertThat(gildedRose.items[0].toString()).isEqualTo(expected);
   }
+
 
   @Test
   public void should_not_change_quality_and_sellin_for_sulfuras()
@@ -105,16 +96,13 @@ public class GildedRoseTest
     //given
     String expected = "Sulfuras, Hand of Ragnaros, 24, 80";
     Item[] items = new Item[]{
-        new Item("Sulfuras, Hand of Ragnaros",24,80)
+        new Item("Sulfuras, Hand of Ragnaros", 24, 80)
     };
-
     GildedRose gildedRose = new GildedRose(items);
-
     //when
     gildedRose.updateQuality();
-
     //then
-    Assertions.assertThat(gildedRose.items[0].toString()).isEqualTo(expected);
+    assertThat(gildedRose.items[0].toString()).isEqualTo(expected);
   }
 
 
@@ -124,16 +112,60 @@ public class GildedRoseTest
     //given
     String expected = "Backstage passes to a TAFKAL80ETC concert, 23, 43";
     Item[] items = new Item[]{
-        new Item("Backstage passes to a TAFKAL80ETC concert",24,42)
+        new Item("Backstage passes to a TAFKAL80ETC concert", 24, 42)
     };
-
     GildedRose gildedRose = new GildedRose(items);
-
     //when
     gildedRose.updateQuality();
-
     //then
-    Assertions.assertThat(gildedRose.items[0].toString()).isEqualTo(expected);
+    assertThat(gildedRose.items[0].toString()).isEqualTo(expected);
   }
 
+
+  @Test
+  public void should_increase_by_2_quality_when_sellin_between_5_and_10_for_backstage()
+  {
+    //given
+    String expected = "Backstage passes to a TAFKAL80ETC concert, 5, 44";
+    Item[] items = new Item[]{
+        new Item("Backstage passes to a TAFKAL80ETC concert", 6, 42)
+    };
+    GildedRose gildedRose = new GildedRose(items);
+    //when
+    gildedRose.updateQuality();
+    //then
+    assertThat(gildedRose.items[0].toString()).isEqualTo(expected);
+  }
+
+
+  @Test
+  public void should_increase_by_3_quality_when_sellin_between_0_and_5_for_backstage()
+  {
+    //given
+    String expected = "Backstage passes to a TAFKAL80ETC concert, 3, 45";
+    Item[] items = new Item[]{
+        new Item("Backstage passes to a TAFKAL80ETC concert", 4, 42)
+    };
+    GildedRose gildedRose = new GildedRose(items);
+    //when
+    gildedRose.updateQuality();
+    //then
+    assertThat(gildedRose.items[0].toString()).isEqualTo(expected);
+  }
+
+
+  @Test
+  public void should_have_0_quality_when_sellin_0_for_backstage()
+  {
+    //given
+    String expected = "Backstage passes to a TAFKAL80ETC concert, -1, 0";
+    Item[] items = new Item[]{
+        new Item("Backstage passes to a TAFKAL80ETC concert", 0, 42)
+    };
+    GildedRose gildedRose = new GildedRose(items);
+    //when
+    gildedRose.updateQuality();
+    //then
+    assertThat(gildedRose.items[0].toString()).isEqualTo(expected);
+  }
 }
