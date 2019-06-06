@@ -1,5 +1,6 @@
 package com.drongox.gildedrose;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -17,19 +18,27 @@ class GildedRose
   public void updateQuality()
   {
     for (Item item : items) {
-      ItemType type = ItemType.of(item.name);
-      type.updateQuality(item);
+      ItemType.of(item.name).orElse(ItemType.STANDARD).updateQuality(item);
     }
   }
 
 
   private enum ItemType
   {
-    SULFURAS("Sulfuras, Hand of Ragnaros", item ->
-    {}),
+    SULFURAS("Sulfuras, Hand of Ragnaros", item -> {}),
     AGE_BRIE("Aged Brie", ItemType::handleAgedBrie),
     BACKSTAGE("Backstage passes to a TAFKAL80ETC concert", ItemType::handleBackstage),
-    STANDARD("", ItemType::handleStandardItem);
+    STANDARD("", ItemType::handleStandardItem),
+    CONJURED("Conjured mana Cake",ItemType::handleConjuredItem);
+
+
+    private static void handleConjuredItem(Item item)
+    {
+      decreaseSellIn(item);
+      descreaseQualityIfPossible(item);
+      descreaseQualityIfPossible(item);
+
+    }
 
 
     private final String name;
@@ -43,12 +52,11 @@ class GildedRose
     }
 
 
-    public static ItemType of(String name)
+    public static Optional<ItemType> of(String name)
     {
       return Stream.of(values())
                    .filter(itemType -> itemType.name.equals(name))
-                   .findFirst()
-                   .orElse(STANDARD);
+                   .findFirst();
     }
 
 

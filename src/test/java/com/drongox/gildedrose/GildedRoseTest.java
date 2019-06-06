@@ -168,4 +168,19 @@ public class GildedRoseTest
     //then
     assertThat(gildedRose.items[0].toString()).isEqualTo(expected);
   }
+
+  @Test
+  public void should_decrease_quality_twice_when_conjured_item()
+  {
+    //given
+    String expected = "Conjured mana Cake, 2, 40";
+    Item[] items = new Item[]{
+        new Item("Conjured mana Cake", 3, 42)
+    };
+    GildedRose gildedRose = new GildedRose(items);
+    //when
+    gildedRose.updateQuality();
+    //then
+    assertThat(gildedRose.items[0].toString()).isEqualTo(expected);
+  }
 }
