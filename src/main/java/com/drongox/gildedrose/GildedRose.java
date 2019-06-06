@@ -18,7 +18,12 @@ class GildedRose
         handleStandardItem(item);
         continue;
       }
+
+      if (isSulfuras(item)){
+        continue;
+      }
       else {
+
         if (isNotMaxQuality(item)) {
           increaseQuality(item);
 
@@ -26,26 +31,17 @@ class GildedRose
             if (item.sellIn < 11) {
               increaseQualityIfPossible(item);
             }
-
             if (item.sellIn < 6) {
               increaseQualityIfPossible(item);
             }
           }
         }
       }
-
-      if (!item.name.equals("Sulfuras, Hand of Ragnaros")) {
         decreaseSellIn(item);
-      }
 
       if (item.sellIn < 0) {
         if (!item.name.equals("Aged Brie")) {
-          if (!item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-            if (!item.name.equals("Sulfuras, Hand of Ragnaros")) {
-              descreaseQualityIfPossible(item);
-            }
-          }
-          else {
+          if (item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
             item.quality = 0;
           }
         }
@@ -57,11 +53,17 @@ class GildedRose
   }
 
 
+  private boolean isSulfuras(Item item)
+  {
+    return item.name.equals("Sulfuras, Hand of Ragnaros");
+  }
+
+
   private boolean isStandardItem(Item item)
   {
     return !item.name.equals("Aged Brie")
         && !item.name.equals("Backstage passes to a TAFKAL80ETC concert")
-        && !item.name.equals("Sulfuras, Hand of Ragnaros");
+        && !isSulfuras(item);
   }
 
 
@@ -72,7 +74,6 @@ class GildedRose
     if (item.sellIn < 0) {
       descreaseQualityIfPossible(item);
     }
-    return;
   }
 
 
