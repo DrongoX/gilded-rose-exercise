@@ -14,47 +14,44 @@ class GildedRose
   public void updateQuality()
   {
     for (Item item : items) {
-      if (isStandardItem(item)) {
-        handleStandardItem(item);
+      if (isSulfuras(item)) {
         continue;
       }
 
-      if (isSulfuras(item)){
-        continue;
-      }
-
-      if (isAgedBrie(item)){
+      if (isAgedBrie(item)) {
         handleAgedBrie(item);
         continue;
       }
-      else {
 
-        if (isNotMaxQuality(item)) {
-          increaseQuality(item);
-
-          if (item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-            if (item.sellIn < 11) {
-              increaseQualityIfPossible(item);
-            }
-            if (item.sellIn < 6) {
-              increaseQualityIfPossible(item);
-            }
-          }
-        }
+      if (isBackstage(item)) {
+        handleBackstage(item);
+        continue;
       }
-        decreaseSellIn(item);
 
-      if (item.sellIn < 0) {
-        if (!isAgedBrie(item))
-         {
-          if (item.name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-            item.quality = 0;
-          }
-        }
-        else {
-          increaseQualityIfPossible(item);
-        }
-      }
+      handleStandardItem(item);
+    }
+  }
+
+
+  private boolean isBackstage(Item item)
+  {
+    return item.name.equals("Backstage passes to a TAFKAL80ETC concert");
+  }
+
+
+  private void handleBackstage(Item item)
+  {
+    increaseQualityIfPossible(item);
+    if (item.sellIn < 11) {
+      increaseQualityIfPossible(item);
+    }
+    if (item.sellIn < 6) {
+      increaseQualityIfPossible(item);
+    }
+
+    decreaseSellIn(item);
+    if (item.sellIn < 0) {
+      item.quality = 0;
     }
   }
 
@@ -82,14 +79,6 @@ class GildedRose
   }
 
 
-  private boolean isStandardItem(Item item)
-  {
-    return !isAgedBrie(item)
-        && !item.name.equals("Backstage passes to a TAFKAL80ETC concert")
-        && !isSulfuras(item);
-  }
-
-
   private void handleStandardItem(Item item)
   {
     descreaseQualityIfPossible(item);
@@ -111,7 +100,7 @@ class GildedRose
   private void increaseQualityIfPossible(Item item)
   {
     if (isNotMaxQuality(item)) {
-      increaseQuality(item);
+      item.quality++;
     }
   }
 
@@ -133,9 +122,4 @@ class GildedRose
     item.sellIn--;
   }
 
-
-  private void increaseQuality(Item item)
-  {
-    item.quality++;
-  }
 }

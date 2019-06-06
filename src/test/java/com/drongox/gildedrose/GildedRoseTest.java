@@ -107,21 +107,6 @@ public class GildedRoseTest
   }
 
   @Test
-  public void should_()
-  {
-    //given
-    String expected = "Sulfuras, Hand of Ragnaros, -1, 80";
-    Item[] items = new Item[]{
-        new Item("Sulfuras, Hand of Ragnaros", -1, 80)
-    };
-    GildedRose gildedRose = new GildedRose(items);
-    //when
-    gildedRose.updateQuality();
-    //then
-    assertThat(gildedRose.items[0].toString()).isEqualTo(expected);
-  }
-
-  @Test
   public void should_increase_quality_when_sellin_above_or_equal_10_for_backstage()
   {
     //given
