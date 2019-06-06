@@ -99,5 +99,41 @@ public class GildedRoseTest
     Assertions.assertThat(gildedRose.items[0].toString()).isEqualTo(expected);
   }
 
+  @Test
+  public void should_not_change_quality_and_sellin_for_sulfuras()
+  {
+    //given
+    String expected = "Sulfuras, Hand of Ragnaros, 24, 80";
+    Item[] items = new Item[]{
+        new Item("Sulfuras, Hand of Ragnaros",24,80)
+    };
+
+    GildedRose gildedRose = new GildedRose(items);
+
+    //when
+    gildedRose.updateQuality();
+
+    //then
+    Assertions.assertThat(gildedRose.items[0].toString()).isEqualTo(expected);
+  }
+
+
+  @Test
+  public void should_increase_quality_when_sellin_above_or_equal_10_for_backstage()
+  {
+    //given
+    String expected = "Backstage passes to a TAFKAL80ETC concert, 23, 43";
+    Item[] items = new Item[]{
+        new Item("Backstage passes to a TAFKAL80ETC concert",24,42)
+    };
+
+    GildedRose gildedRose = new GildedRose(items);
+
+    //when
+    gildedRose.updateQuality();
+
+    //then
+    Assertions.assertThat(gildedRose.items[0].toString()).isEqualTo(expected);
+  }
 
 }
