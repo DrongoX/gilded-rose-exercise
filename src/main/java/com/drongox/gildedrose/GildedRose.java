@@ -13,43 +13,63 @@ class GildedRose {
 
     public void updateQuality() {
         for (Item item : items) {
-            if (!isAgedBrie(item) && !isBackstage(item)) {
-                if (!isSulfuras(item)) {
-                    decreaseQualityWhenPositive(item);
-                }
+            if (isBackstage(item)){
+                handleBackstageItem(item);
+
             } else {
-                if (isLessThanMaxNormalQuality(item)) {
-                    item.quality = item.quality + 1;
-
-                    if (isBackstage(item)) {
-                        if (item.sellIn < 11) {
-                            increaseQualityIfPossible(item);
-                        }
-
-                        if (item.sellIn < 6) {
-                            increaseQualityIfPossible(item);
-                        }
-                    }
-                }
-            }
-
-            if (!isSulfuras(item)) {
-                item.sellIn = item.sellIn - 1;
-            }
-
-            if (item.sellIn < 0) {
                 if (!isAgedBrie(item)) {
-                    if (!isBackstage(item)) {
-                        if (!isSulfuras(item)) {
-                            decreaseQualityWhenPositive(item);
-                        }
-                    } else {
-                        item.quality = item.quality - item.quality;
+                    if (!isSulfuras(item)) {
+                        decreaseQualityWhenPositive(item);
                     }
                 } else {
                     increaseQualityIfPossible(item);
                 }
+
+                if (!isSulfuras(item)) {
+                    item.sellIn = item.sellIn - 1;
+                }
+
+                if (item.sellIn < 0) {
+                    if (!isAgedBrie(item)) {
+
+                        if (!isSulfuras(item)) {
+                            decreaseQualityWhenPositive(item);
+                        }
+
+                    } else {
+                        increaseQualityIfPossible(item);
+                    }
+                }
+
             }
+
+
+        }
+    }
+
+    private void handleBackstageItem(Item item) {
+
+        if (item.sellIn < 6) {
+            increaseQualityIfPossible(item);
+            increaseQualityIfPossible(item);
+            increaseQualityIfPossible(item);
+
+        } else if (item.sellIn < 11) {
+            increaseQualityIfPossible(item);
+            increaseQualityIfPossible(item);
+
+        } else {
+            increaseQualityIfPossible(item);
+        }
+
+        item.sellIn = item.sellIn - 1;
+
+        setQualityToZeroIfSellInExpired(item);
+    }
+
+    private void setQualityToZeroIfSellInExpired(Item item) {
+        if (item.sellIn < 0) {
+            item.quality = 0;
         }
     }
 
