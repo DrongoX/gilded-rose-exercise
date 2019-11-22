@@ -4,11 +4,12 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 
 enum ItemType {
-    NORMAL("", ItemType::handleNormalItem),
-    SULFURAS("Sulfuras, Hand of Ragnaros", item -> {
+    NORMAL(null, ItemType::handleNormalItem),
+    SULFURAS("Sulfuras", item -> {
     }),
-    BACKSTAGES("Backstage passes to a TAFKAL80ETC concert", ItemType::handleBackstageItem),
+    BACKSTAGES("Backstage passes", ItemType::handleBackstageItem),
     AGED_BRIE("Aged Brie", ItemType::handleAgedBrie),
+    CONJURED("Conjured", ItemType::handleConjured),
     ;
 
     public static final int NORMAL_ITEM_MAX_QUALITY = 50;
@@ -24,7 +25,10 @@ enum ItemType {
 
     public static ItemType of(Item item) {
         return Arrays.stream(ItemType.values())
-                .filter(itemType -> itemType.label.equals(item.name))
+                .filter(itemType -> itemType != NORMAL)
+                .filter(itemType -> item != null
+                        && item.name != null
+                        && item.name.contains(itemType.label))
                 .findFirst()
                 .orElse(ItemType.NORMAL);
     }
@@ -37,8 +41,7 @@ enum ItemType {
         item.sellIn = item.sellIn - 1;
 
         if (item.sellIn < 0) {
-            decreaseQualityWhenPositive(item);
-            decreaseQualityWhenPositive(item);
+            decreaseQualityWhenPositive(item, 2);
         } else {
             decreaseQualityWhenPositive(item);
         }
@@ -48,8 +51,7 @@ enum ItemType {
         item.sellIn = item.sellIn - 1;
 
         if (item.sellIn < 0) {
-            increaseQualityIfPossible(item);
-            increaseQualityIfPossible(item);
+            increaseQualityIfPossible(item, 2);
         } else {
             increaseQualityIfPossible(item);
         }
@@ -58,13 +60,10 @@ enum ItemType {
     private static void handleBackstageItem(Item item) {
 
         if (item.sellIn < 6) {
-            increaseQualityIfPossible(item);
-            increaseQualityIfPossible(item);
-            increaseQualityIfPossible(item);
+            increaseQualityIfPossible(item, 3);
 
         } else if (item.sellIn < 11) {
-            increaseQualityIfPossible(item);
-            increaseQualityIfPossible(item);
+            increaseQualityIfPossible(item, 2);
 
         } else {
             increaseQualityIfPossible(item);
@@ -73,6 +72,16 @@ enum ItemType {
         item.sellIn = item.sellIn - 1;
 
         setQualityToZeroIfSellInExpired(item);
+    }
+
+    private static void handleConjured(Item item) {
+        item.sellIn = item.sellIn - 1;
+
+        if (item.sellIn < 0) {
+            decreaseQualityWhenPositive(item, 4);
+        } else {
+            decreaseQualityWhenPositive(item, 2);
+        }
     }
 
     private static void setQualityToZeroIfSellInExpired(Item item) {
@@ -95,9 +104,21 @@ enum ItemType {
         }
     }
 
+    private static void increaseQualityIfPossible(Item item, int times) {
+        for (int i = 0; i < times; i++) {
+            increaseQualityIfPossible(item);
+        }
+    }
+
     private static void decreaseQualityWhenPositive(Item item) {
         if (isQualityPositive(item)) {
             item.quality--;
+        }
+    }
+
+    private static void decreaseQualityWhenPositive(Item item, int times) {
+        for (int i = 0; i < times; i++) {
+            decreaseQualityWhenPositive(item);
         }
     }
 }

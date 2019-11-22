@@ -10,12 +10,8 @@ class GildedRose {
 
     public void updateQuality() {
         for (Item item : items) {
-            handleItem(item);
+            ItemType.of(item).handle(item);
         }
     }
 
-    private void handleItem(Item item) {
-        ItemType itemType = ItemType.of(item);
-        itemType.handle(item);
-    }
 }

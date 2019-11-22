@@ -98,6 +98,19 @@ public class GildedRoseTest {
     }
 
     @Test
+    public void updateQuality_withSulfurasOnly_shouldHaveQuality80AndNeverAlters() {
+        // Given
+        Item normalItem = new Item("Sulfuras", 0, SULFURAS_QUALITY);
+        Item[] items = new Item[]{normalItem};
+        GildedRose gildedRose = new GildedRose(items);
+        //When
+        gildedRose.updateQuality();
+        //Then
+        assertThat(normalItem.quality).isEqualTo(SULFURAS_QUALITY);
+        assertThat(normalItem.sellIn).isEqualTo(0);
+    }
+
+    @Test
     public void updateQuality_withBackstagePassesAndSellInGreaterThan10_shouldIncreaseInQuality() {
         // Given
         Item normalItem = new Item("Backstage passes to a TAFKAL80ETC concert", 11, 30);
@@ -147,5 +160,21 @@ public class GildedRoseTest {
         //Then
         assertThat(normalItem.quality).isEqualTo(0);
         assertThat(normalItem.sellIn).isEqualTo(-2);
+    }
+
+    @Test
+    public void updateQuality_withConjuredItemHavingQuality50AndSellIn10_shouldDecreaseQualityTo48AndSellInTo9() {
+        //Given
+        int sellIn = 10;
+        Item normalItem = new Item("Conjured", sellIn, NORMAL_ITEM_MAX_QUALITY);
+        Item[] items = new Item[]{normalItem};
+        GildedRose gildedRose = new GildedRose(items);
+
+        //When
+        gildedRose.updateQuality();
+
+        //Then
+        assertThat(normalItem.quality).isEqualTo(48);
+        assertThat(normalItem.sellIn).isEqualTo(9);
     }
 }
