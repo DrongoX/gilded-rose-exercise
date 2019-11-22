@@ -1,6 +1,9 @@
 package com.drongox.gildedrose;
 
 class GildedRose {
+
+  public static final int NORMAL_ITEM_MAX_QUALITY = 50;
+
   Item[] items;
 
   public GildedRose(Item[] items) {

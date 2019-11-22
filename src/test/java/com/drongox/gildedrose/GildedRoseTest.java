@@ -3,16 +3,45 @@
  */
 package com.drongox.gildedrose;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static com.drongox.gildedrose.GildedRose.NORMAL_ITEM_MAX_QUALITY;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 public class GildedRoseTest
 {
+
   @Test
-  public void testOmarIsInTheRoom()
-  {
-    throw new OutOfMemoryError("Omar c'est ta faute!!!!!!");
+  public void updateQuality_withNoItems_shouldNotThrow() {
+
+    //Given
+    Item[] items = new Item[]{};
+    GildedRose gildedRose = new GildedRose(items);
+
+    //When
+    gildedRose.updateQuality();
+
+    //Then should not throw
   }
+
+  @Test
+  public void updateQuality_withNormalItemHavingQuality50AndSellIn10_shouldDecreaseQualityTo49AndSellInTo9() {
+
+    //Given
+    int sellIn = 10;
+    Item normalItem = new Item("normal item", sellIn, NORMAL_ITEM_MAX_QUALITY);
+    Item[] items = new Item[]{normalItem};
+    GildedRose gildedRose = new GildedRose(items);
+
+    //When
+    gildedRose.updateQuality();
+
+    //Then
+    assertThat(normalItem.quality).isEqualTo(49);
+    assertThat(normalItem.sellIn).isEqualTo(9);
+  }
+
+
 }
